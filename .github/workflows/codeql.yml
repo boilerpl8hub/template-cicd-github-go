@@ -1,0 +1,44 @@
+name: CodeQL
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main]
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      security-events: write
+      actions: read  # required for private repos
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: go
+
+      # Set GOPROXY variable in repo settings for custom proxy (e.g. Iran mirrors)
+      - name: Download dependencies
+        run: |
+          GOPROXY=${{ vars.GOPROXY || 'https://proxy.golang.org,direct' }} \
+          go mod download
+
+      - name: Build for CodeQL
+        run: go build ./...
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: /language:go
