@@ -197,7 +197,7 @@ jobs:
         run: |
           PREV=$(ssh -i ~/.ssh/id_rsa \
             ${{ secrets.STAGING_SERVER_USER }}@${{ secrets.STAGING_SERVER_HOST }} \
-            "cat ${{ secrets.STAGING_SERVER_DIR }}/.current_tag 2>/dev/null || echo none")
+            "cat ${{ secrets.STAGING_SERVER_DIR }}/.current_tag 2>/dev/null || echo none" 2>/dev/null || echo none)
           echo "PREVIOUS_TAG=$PREV" >> $GITHUB_ENV
 
       - name: Copy docker-compose to server
@@ -305,7 +305,7 @@ jobs:
         run: |
           PREV=$(ssh -i ~/.ssh/id_rsa \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
-            "cat ${{ secrets.SERVER_DIR }}/.current_tag 2>/dev/null || echo none")
+            "cat ${{ secrets.SERVER_DIR }}/.current_tag 2>/dev/null || echo none" 2>/dev/null || echo none)
           echo "PREVIOUS_TAG=$PREV" >> $GITHUB_ENV
 
       - name: Copy docker-compose to server

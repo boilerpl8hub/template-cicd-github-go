@@ -147,8 +147,8 @@ Repeat with a different key name for staging (`~/.ssh/deploy_key_staging`).
 
 | Trigger | Jobs run |
 |---|---|
-| PR → `develop` | `test` (matrix 1.22 + 1.23) |
-| PR → `main` | `test` + `build-push` + `deploy-staging` |
+| PR → `develop` | `test` (matrix 1.22 + 1.23) + CodeQL SAST |
+| PR → `main` | `test` + `build-push` + `deploy-staging` + CodeQL SAST |
 | Push to `ops/**` | `build-push` + `deploy-prod` |
 | `workflow_dispatch` (staging) | `build-push` + `deploy-staging` |
 | `workflow_dispatch` (prod) | `build-push` + `deploy-prod` |

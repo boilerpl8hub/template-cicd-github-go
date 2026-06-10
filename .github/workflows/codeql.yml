@@ -11,6 +11,8 @@ jobs:
     name: Analyze
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      GOPROXY: ${{ vars.GOPROXY || 'https://proxy.golang.org,direct' }}
     permissions:
       security-events: write
       actions: read  # required for private repos
@@ -31,9 +33,7 @@ jobs:
 
       # Set GOPROXY variable in repo settings for custom proxy (e.g. Iran mirrors)
       - name: Download dependencies
-        run: |
-          GOPROXY=${{ vars.GOPROXY || 'https://proxy.golang.org,direct' }} \
-          go mod download
+        run: GOPROXY=$GOPROXY go mod download
 
       - name: Build for CodeQL
         run: go build ./...
